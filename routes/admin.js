@@ -93,9 +93,7 @@ router.post('/login', (req, res) => {
  */
 router.post('/types_add', function(req, res) {
     let type = req.body.type;
-    Types
-        .findOne({type: type})
-        .then(result => {
+    Types.findOne({type: type}).then(result => {
             if(result){
                 res.json({
                     status: 1,
@@ -120,5 +118,48 @@ router.post('/types_add', function(req, res) {
             }
         })
 });
+/**
+ * 分类 删除
+ */
+router.get('/delete', (req, res) => {
+    let tid = req.query.tid;
+    Types.remove({_id: tid}).then((result) => {
+        if(result) {
+            res.redirect('/admin/types')
+        }
+    })
+})
+/**
+ * 分类  编辑页面
+ */
+router.get('/edit', (req, res) => {
+    let type = req.query.type;
+    let tid = req.query.tid;
+    res.render('back/types_edit',{
+        type: type,
+        tid: tid
+    })
+})
+/**
+ * 分类  编辑功能
+ */
+router.post('/types_edit', (req, res) => {
+    let type = req.body.type;
+    let tid = req.body.tid;
+    console.log(tid,type)
+    Types.update({_id: tid}, {type: type,update_date:Date.now()}).then(result => {
+        if(result){
+            res.json({
+                status: 0,
+                msg: "修改分类成功"
+            })
+        }else{
+            res.json({
+                status: 1,
+                msg: "修改分类失败"
+            })
+        }
+    })
+})
 
 module.exports = router;
