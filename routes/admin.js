@@ -2,10 +2,22 @@ const express = require('express');
 const router = express.Router();
 const Admin = require('../models/Admin');
 /**
- * admin 首页
+ * admin 用户列表页
  */
-router.get('/', function(req, res) {
+router.get('/users', function(req, res) {
     res.render('back/users')
+});
+/**
+ * 分类 列表页
+ */
+router.get('/types', function(req, res) {
+    res.render('back/types')
+});
+/**
+ * 文章 列表页
+ */
+router.get('/articles', function(req, res) {
+    res.render('back/articles')
 });
 /**
  * 渲染登录界面
