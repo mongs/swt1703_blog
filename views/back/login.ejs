@@ -16,10 +16,20 @@
     <link rel="stylesheet" href="/assets/css/amazeui.datatables.min.css"/>
     <link rel="stylesheet" href="/assets/css/app.css">
     <script src="/assets/js/jquery.min.js"></script>
+    <style>
+        .am-alert-warning{
+            position: fixed;left: 0;
+            top:0;width: 100%;
+            display: none;
+        }
+    </style>
 </head>
 <body data-type="login">
 <script src="/assets/js/theme.js"></script>
 <div class="am-g tpl-g">
+    <div id="msg" class="am-alert am-alert-warning" data-am-alert>
+
+    </div>
     <!-- 风格切换 -->
     <div class="tpl-skiner">
         <div class="tpl-skiner-toggle am-icon-cog">
@@ -73,10 +83,21 @@
             type: "POST",
             data: $('form').serialize(),
             success: function (res) {
-                console.log(res)
+                if(res.status == 0){
+                    $('#msg').text(res.msg).fadeIn()
+                    setTimeout(function () {
+                        $('#msg').fadeOut()
+                        location.href = "/admin"
+                    },2000)
+                }else{
+                    $('#msg').text(res.msg).fadeIn()
+                    setTimeout(function () {
+                        $('#msg').fadeOut()
+                    },2000)
+                }
             },
             error: function (err) {
-                console.log(err)
+                throw err
             }
         })
     })

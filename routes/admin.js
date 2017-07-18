@@ -1,7 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Admin = require('../models/Admin');
-
+/**
+ * admin 首页
+ */
+router.get('/', function(req, res) {
+    res.render('back/index')
+});
 /**
  * 渲染登录界面
  * 路由: /admin/login
@@ -22,7 +27,19 @@ router.post('/login', (req, res) => {
       username: username,
       password: password
   }).then(result => {
-    res.send("登录成功")
+    if(result){
+        //登录成功
+        res.json({
+            status: 0,
+            msg: "登录成功"
+        })
+    }else{
+        //登录失败
+        res.json({
+            status: 1,
+            msg: "登录失败"
+        })
+    }
   })
 });
 
