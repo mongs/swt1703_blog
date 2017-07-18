@@ -18,10 +18,16 @@
     <script src="/assets/js/jquery.min.js"></script>
 
 </head>
-<body data-type="login">
+<body>
 <script src="/assets/js/theme.js"></script>
 <div class="am-g tpl-g">
-    <h1>您好,管理员</h1>
+    <%- include nav.ejs %>
+    <%- include slid.ejs %>
+    <div class="tpl-content-wrapper">
+        <div class="row-content am-cf">
+            <p class="am-text-xxxl am-text-primary">欢迎您, 系统管理员!</p>
+        </div>
+    </div>
 </div>
 </body>
 

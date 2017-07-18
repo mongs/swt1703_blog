@@ -1,8 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const Admin = require('../models/Admin');
+const Types = require('../models/Types');
 /**
- * 用户列表页
+ * 管理首页
+ */
+router.get('/', function(req, res) {
+    if(!req.session.username){
+        res.redirect('/admin/login')
+    }
+    res.render('back/index')
+});
+/**
+ * 用户 列表页
  */
 router.get('/users', function(req, res) {
     if(!req.session.username){
@@ -14,7 +24,13 @@ router.get('/users', function(req, res) {
  * 分类 列表页
  */
 router.get('/types', function(req, res) {
-    res.render('back/types')
+    Types.find().then(result => {
+        if(result){
+            res.render('back/types',{
+                types: result
+            })
+        }
+    })
 });
 /**
  * 分类 添加页
@@ -70,6 +86,39 @@ router.post('/login', (req, res) => {
         })
     }
   })
+});
+
+/**
+ * 分类 添加功能
+ */
+router.post('/types_add', function(req, res) {
+    let type = req.body.type;
+    Types
+        .findOne({type: type})
+        .then(result => {
+            if(result){
+                res.json({
+                    status: 1,
+                    msg: "分类已存在"
+                })
+            }else{
+                Types.create({
+                    type: type
+                }).then(result => {
+                    if(result){
+                        res.json({
+                            status: 0,
+                            msg: "创建成功"
+                        })
+                    }else{
+                        res.json({
+                            status: 1,
+                            msg: "创建失败,稍后重试"
+                        })
+                    }
+                })
+            }
+        })
 });
 
 module.exports = router;
