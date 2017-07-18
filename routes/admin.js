@@ -5,7 +5,7 @@ const Admin = require('../models/Admin');
  * admin 首页
  */
 router.get('/', function(req, res) {
-    res.render('back/index')
+    res.render('back/users')
 });
 /**
  * 渲染登录界面
