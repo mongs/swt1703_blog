@@ -1,7 +1,9 @@
 const express = require('express');
+const markdown = require('markdown').markdown;
 const router = express.Router();
 const Admin = require('../models/Admin');
 const Types = require('../models/Types');
+const Article = require('../models/Article');
 /**
  * 管理首页
  */
@@ -42,13 +44,57 @@ router.get('/types_add', function(req, res) {
  * 文章 列表页
  */
 router.get('/articles', function(req, res) {
-    res.render('back/articles')
+    Article.find().populate({path:'type', select:'type'}).then(function (result) {
+      res.render('back/articles', {
+          articles: result
+      })
+  })
+
 });
 /**
  * 文章 添加页
  */
 router.get('/articles_add', function(req, res) {
-    res.render('back/articles_add')
+    Types.find().then(result => {
+      res.render('back/articles_add',{
+          types: result
+      })
+    })
+
+});
+/**
+ * 文章添加功能
+ */
+router.post('/articles_add', function (req, res) {
+    let info = req.body;
+
+    let content = markdown.toHTML(info.content);
+    let show = true;
+    if(info.show){
+      show = false
+    }
+
+    let obj = {
+      title: info.title,
+      time: info.time,
+      type: info.type,
+      author: info.author,
+      show: show,
+      content: content
+    };
+    Article.create(obj).then(result => {
+        if(result){
+            res.json({
+              status: 0,
+              msg: "文章添加成功"
+            })
+        }else{
+            res.json({
+                status: 1,
+                msg:"文章添加失败"
+            })
+        }
+    })
 });
 /**
  * 渲染登录界面
