@@ -10,8 +10,8 @@ router.post('/reg', (req, res) => {
   const secret = 'wally';
   // 加密
   password = crypto.createHmac('sha256', secret)
-    .update(password)
-    .digest('hex');
+                    .update(password)
+                    .digest('hex');
   User.findOne({email: email}).then(result => {
     if(result){
       res.json({
@@ -23,6 +23,7 @@ router.post('/reg', (req, res) => {
         email: email,
         password: password
       }).then(result => {
+        req.session.cookie.maxAge = 3000000;
         req.session.email = email;
         res.json({
           status: 0,
@@ -39,10 +40,12 @@ router.post('/login', (req, res) => {
   const secret = 'wally';
   // 加密
   password = crypto.createHmac('sha256', secret)
-    .update(password)
-    .digest('hex');
+                  .update(password)
+                  .digest('hex');
   User.findOne({email: email, password: password}).then(result => {
     if(result){
+      req.session.cookie.maxAge = 3000000;
+      req.session.email = email;
       res.json({
         status: 0,
         msg: "登录成功"
@@ -54,6 +57,9 @@ router.post('/login', (req, res) => {
       })
     }
   })
+});
+router.get('/',(req) => {
+  console.log(req.session)
 })
 
 module.exports = router;
