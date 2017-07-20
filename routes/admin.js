@@ -44,12 +44,12 @@ router.get('/types_add', function(req, res) {
  * 文章 列表页
  */
 router.get('/articles', function(req, res) {
-    Article.find().populate({path:'type', select:'type'}).then(function (result) {
+    Article.find().populate('type', 'type').then(function (result) {
+        console.log(result)
       res.render('back/articles', {
           articles: result
       })
   })
-
 });
 /**
  * 文章 添加页

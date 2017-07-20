@@ -78,7 +78,11 @@
                                                 <%= articles[i].type.type %>
                                             </td>
                                             <td class="am-text-middle">
-                                                <%= articles[i].show %>
+                                                <% if(articles[i].show){ %>
+                                                    <input type="checkbox" checked>
+                                                <% } else { %>
+                                                    <input type="checkbox">
+                                                <% } %>
                                             </td>
                                             <td class="am-text-middle">
                                                 <div class="tpl-table-black-operation">
