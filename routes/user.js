@@ -4,7 +4,8 @@ const User = require('../models/User');
 const router = express.Router();
 
 router.post('/reg', (req, res) => {
-  res.header("Access-Control-Allow-Origin", '*');
+  res.header("Access-Control-Allow-Origin", 'http://localhost:9527');
+  res.header("Access-Control-Allow-Credentials", "true");
   let email = req.body.email;
   let password = req.body.password;
   const secret = 'wally';
@@ -23,7 +24,6 @@ router.post('/reg', (req, res) => {
         email: email,
         password: password
       }).then(result => {
-        req.session.cookie.maxAge = 3000000;
         req.session.email = email;
         res.json({
           status: 0,
@@ -34,7 +34,8 @@ router.post('/reg', (req, res) => {
   })
 });
 router.post('/login', (req, res) => {
-  res.header("Access-Control-Allow-Origin", '*');
+  res.header("Access-Control-Allow-Origin", "http://localhost:9527");
+  res.header("Access-Control-Allow-Credentials", "true");
   let email = req.body.email;
   let password = req.body.password;
   const secret = 'wally';
@@ -44,7 +45,6 @@ router.post('/login', (req, res) => {
                   .digest('hex');
   User.findOne({email: email, password: password}).then(result => {
     if(result){
-      req.session.cookie.maxAge = 3000000;
       req.session.email = email;
       res.json({
         status: 0,
@@ -58,8 +58,12 @@ router.post('/login', (req, res) => {
     }
   })
 });
-router.get('/',(req) => {
-  console.log(req.session)
+
+router.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if(err) throw err
+    res.redirect('http://localhost:9527/lw-index.html')
+  })
 })
 
 module.exports = router;

@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: 'sram wally',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false
 }))
 
 app.use('/admin', admin);

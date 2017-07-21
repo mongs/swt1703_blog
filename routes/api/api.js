@@ -6,8 +6,10 @@ const router = express.Router();
 let resData = {};
 
 router.use((req,res,next) => {
-  res.header("Access-Control-Allow-Origin", '*');
-  console.log(req.session)
+  res.header("Access-Control-Allow-Origin", 'http://localhost:9527');
+  res.header("Access-Control-Allow-Credentials", "true");
+  console.log(req.session,'index')
+
   if(req.session.email){
     resData.email = req.session.email
   }else{

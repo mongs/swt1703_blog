@@ -4,6 +4,9 @@ const router = express.Router();
 const Admin = require('../models/Admin');
 const Types = require('../models/Types');
 const Article = require('../models/Article');
+const User = require('../models/User');
+
+
 /**
  * 管理首页
  */
@@ -18,9 +21,14 @@ router.get('/', function(req, res) {
  */
 router.get('/users', function(req, res) {
     if(!req.session.username){
-        res.redirect('/admin/login')
+      res.redirect('/admin/login')
     }
-    res.render('back/users')
+  User.find().then(result => {
+    res.render('back/users',{
+      users: result
+    })
+  })
+
 });
 /**
  * 分类 列表页
@@ -42,10 +50,13 @@ router.get('/types_add', function(req, res) {
 });
 /**
  * 文章 列表页
+ * skip()  跳过 0-3  4
+ * limit() 限制获取几条数据
+ * sort 排序
+ * count 总数
  */
 router.get('/articles', function(req, res) {
-    Article.find().populate('type', 'type').then(function (result) {
-        console.log(result)
+    Article.find().populate('type', 'type').skip(1).limit(10).sort({'title':-1}).then(function (result) {
       res.render('back/articles', {
           articles: result
       })
